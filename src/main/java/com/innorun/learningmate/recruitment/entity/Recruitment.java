@@ -43,8 +43,11 @@ public class Recruitment extends BaseEntity {
     @Column(nullable = false, length = 20)
     private StudyType studyType;
 
-    @Column(nullable = false)
-    private String location;
+    @Column(length = 100)
+    private String onlinePlatform;
+
+    @Column(length = 255)
+    private String offlineLocation;
 
     @Column(nullable = false)
     private Integer capacity;
@@ -53,7 +56,7 @@ public class Recruitment extends BaseEntity {
     private LocalDateTime recruitmentDeadline;
 
     @Column(nullable = false)
-    private LocalDateTime meetingAt;
+    private LocalDateTime startAt;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
@@ -64,19 +67,21 @@ public class Recruitment extends BaseEntity {
             String title,
             String description,
             StudyType studyType,
-            String location,
+            String onlinePlatform,
+            String offlineLocation,
             Integer capacity,
             LocalDateTime recruitmentDeadline,
-            LocalDateTime meetingAt
+            LocalDateTime startAt
     ) {
         this.author = author;
         this.title = title;
         this.description = description;
         this.studyType = studyType;
-        this.location = location;
+        this.onlinePlatform = onlinePlatform;
+        this.offlineLocation = offlineLocation;
         this.capacity = capacity;
         this.recruitmentDeadline = recruitmentDeadline;
-        this.meetingAt = meetingAt;
+        this.startAt = startAt;
         this.status = RecruitmentStatus.OPEN;
     }
 
