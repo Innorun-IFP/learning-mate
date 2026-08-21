@@ -1,5 +1,9 @@
 package com.innorun.learningmate.Community.entity;
 
+
+import lombok.Getter;
+
+@Getter
 public enum ForumBoardType {
     JOB_INFO("취업정보"),
     CAREER_QNA("취업·진로 Q&A"),
@@ -11,7 +15,4 @@ public enum ForumBoardType {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
 }
