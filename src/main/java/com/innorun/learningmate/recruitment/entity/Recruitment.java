@@ -30,14 +30,18 @@ public class Recruitment extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
 
     @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private StudyType studyType;
 
     @Column(nullable = false)
     private String location;
@@ -56,17 +60,19 @@ public class Recruitment extends BaseEntity {
     private RecruitmentStatus status;
 
     public Recruitment(
-            User user,
+            User author,
             String title,
             String description,
+            StudyType studyType,
             String location,
             Integer capacity,
             LocalDateTime recruitmentDeadline,
             LocalDateTime meetingAt
     ) {
-        this.user = user;
+        this.author = author;
         this.title = title;
         this.description = description;
+        this.studyType = studyType;
         this.location = location;
         this.capacity = capacity;
         this.recruitmentDeadline = recruitmentDeadline;
