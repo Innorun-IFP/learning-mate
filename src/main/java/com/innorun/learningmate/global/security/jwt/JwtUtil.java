@@ -56,4 +56,43 @@ public class JwtUtil {
                 .signWith(secretKey)
                 .compact();
     }
+
+    public Claims getAccessTokenClaims(String token) {
+        return getTokenClaims(token, TOKEN_TYPE_ACCESS);
+    }
+
+    public Claims getRefreshTokenClaims(String token) {
+        return getTokenClaims(token, TOKEN_TYPE_REFRESH);
+    }
+
+    private Claims getTokenClaims(String token, String expectedTokenType) {
+        Claims claims = getClaims(token);
+        String actualTokenType = claims.get(TOKEN_TYPE_CLAIM, String.class);
+
+        if (!expectedTokenType.equals(actualTokenType)) {
+            throw JwtErrorCode.JWT_INVALID_TOKEN_TYPE.toException();
+        }
+
+        return claims;
+    }
+
+    private Claims getClaims(String token) {
+        try {
+            return Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (ExpiredJwtException exception) {
+            throw JwtErrorCode.JWT_TOKEN_EXPIRED.toException();
+        } catch (SignatureException exception) {
+            throw JwtErrorCode.JWT_TOKEN_SIGNATURE_ERROR.toException();
+        } catch (MalformedJwtException | IllegalArgumentException exception) {
+            throw JwtErrorCode.JWT_TOKEN_ERROR.toException();
+        } catch (UnsupportedJwtException exception) {
+            throw JwtErrorCode.JWT_TOKEN_UNSUPPORTED_ERROR.toException();
+        } catch (JwtException exception) {
+            throw JwtErrorCode.JWT_UNKNOWN_EXCEPTION.toException();
+        }
+    }
 }
