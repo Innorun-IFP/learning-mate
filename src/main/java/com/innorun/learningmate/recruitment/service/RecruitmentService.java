@@ -3,6 +3,7 @@ package com.innorun.learningmate.recruitment.service;
 import com.innorun.learningmate.global.exception.ServiceException;
 import com.innorun.learningmate.recruitment.dto.request.RecruitmentCreateRequest;
 import com.innorun.learningmate.recruitment.dto.response.RecruitmentResponse;
+import com.innorun.learningmate.recruitment.dto.response.RecruitmentSummaryResponse;
 import com.innorun.learningmate.recruitment.entity.Recruitment;
 import com.innorun.learningmate.recruitment.repository.RecruitmentRepository;
 import com.innorun.learningmate.user.entity.User;
@@ -11,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +49,7 @@ public class RecruitmentService {
         return savedRecruitment.getId();
     }
 
-    public RecruitmentResponse findById(Long recruitmentId) {
+    public RecruitmentResponse getRecruitmentDetail(Long recruitmentId) {
         Recruitment recruitment = recruitmentRepository.findById(recruitmentId)
                 .orElseThrow(() -> new ServiceException(
                         HttpStatus.NOT_FOUND,
@@ -53,5 +57,16 @@ public class RecruitmentService {
                 ));
 
         return new RecruitmentResponse(recruitment);
+    }
+
+    public List<RecruitmentSummaryResponse> getRecruitmentList() {
+        List<Recruitment> recruitments = recruitmentRepository.findAll();
+        List<RecruitmentSummaryResponse> responses = new ArrayList<>();
+
+        for (Recruitment recruitment : recruitments) {
+            responses.add(new RecruitmentSummaryResponse(recruitment));
+        }
+
+        return responses;
     }
 }
