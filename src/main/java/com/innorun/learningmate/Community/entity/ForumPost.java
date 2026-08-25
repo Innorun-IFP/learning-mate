@@ -18,7 +18,7 @@ public class ForumPost extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "author_id", nullable = false)
-    public User author;
+    private User author;
 
     @Column(nullable = false, length = 150)
     private String title;
@@ -30,4 +30,17 @@ public class ForumPost extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "board_type", nullable = false, length = 30)
     private ForumBoardType boardType;
+
+    public ForumPost(User author, String title, String content, ForumBoardType boardType) {
+        this.author = author;
+        this.title = title;
+        this.content = content;
+        this.boardType = boardType;
+    }
+
+    public void update(String title, String content, ForumBoardType boardType) {
+        this.title = title;
+        this.content = content;
+        this.boardType = boardType;
+    }
 }
