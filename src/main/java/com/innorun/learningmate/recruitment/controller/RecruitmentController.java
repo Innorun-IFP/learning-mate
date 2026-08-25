@@ -1,5 +1,6 @@
 package com.innorun.learningmate.recruitment.controller;
 
+import com.innorun.learningmate.global.security.principal.CurrentUserId;
 import com.innorun.learningmate.recruitment.dto.request.RecruitmentCreateRequest;
 import com.innorun.learningmate.recruitment.dto.request.RecruitmentUpdateRequest;
 import com.innorun.learningmate.recruitment.dto.response.RecruitmentResponse;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -27,9 +27,10 @@ public class RecruitmentController {
 
     @PostMapping("/recruitments")
     public ResponseEntity<Long> create(
+            @CurrentUserId Long authorId,
             @RequestBody RecruitmentCreateRequest request
     ) {
-        Long recruitmentId = recruitmentService.create(request);
+        Long recruitmentId = recruitmentService.create(authorId, request);
 
         return ResponseEntity
                 .created(URI.create("/recruitments/" + recruitmentId))
@@ -55,7 +56,7 @@ public class RecruitmentController {
     @PutMapping("/recruitments/{recruitmentId}")
     public ResponseEntity<RecruitmentResponse> updateRecruitment(
             @PathVariable Long recruitmentId,
-            @RequestParam Long authorId,
+            @CurrentUserId Long authorId,
             @RequestBody RecruitmentUpdateRequest request
     ) {
         RecruitmentResponse response = recruitmentService.updateRecruitment(
@@ -70,7 +71,7 @@ public class RecruitmentController {
     @PatchMapping("/recruitments/{recruitmentId}/close")
     public ResponseEntity<RecruitmentResponse> closeRecruitment(
             @PathVariable Long recruitmentId,
-            @RequestParam Long authorId
+            @CurrentUserId Long authorId
     ) {
         RecruitmentResponse response = recruitmentService.closeRecruitment(
                 recruitmentId,
@@ -83,7 +84,7 @@ public class RecruitmentController {
     @PatchMapping("/recruitments/{recruitmentId}/cancel")
     public ResponseEntity<RecruitmentResponse> cancelRecruitment(
             @PathVariable Long recruitmentId,
-            @RequestParam Long authorId
+            @CurrentUserId Long authorId
     ) {
         RecruitmentResponse response = recruitmentService.cancelRecruitment(
                 recruitmentId,

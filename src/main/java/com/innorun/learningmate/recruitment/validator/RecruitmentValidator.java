@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 public class RecruitmentValidator {
 
     public void validateCreate(RecruitmentCreateRequest request) {
-        validateAuthorId(request.getAuthorId());
         validateBasicInfo(
                 request.getTitle(),
                 request.getDescription(),
@@ -51,15 +50,6 @@ public class RecruitmentValidator {
                 request.getOnlinePlatform(),
                 request.getOfflineLocation()
         );
-    }
-
-    private void validateAuthorId(Long authorId) {
-        if (authorId == null) {
-            throw new ServiceException(
-                    HttpStatus.BAD_REQUEST,
-                    "작성자 ID는 필수입니다."
-            );
-        }
     }
 
     private void validateBasicInfo(
