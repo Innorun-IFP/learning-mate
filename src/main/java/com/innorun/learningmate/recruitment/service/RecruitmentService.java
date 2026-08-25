@@ -29,10 +29,10 @@ public class RecruitmentService {
     private final RecruitmentValidator recruitmentValidator;
 
     @Transactional
-    public Long create(RecruitmentCreateRequest request) {
+    public Long create(Long authorId, RecruitmentCreateRequest request) {
         recruitmentValidator.validateCreate(request);
 
-        User author = userRepository.findById(request.getAuthorId())
+        User author = userRepository.findByIdAndDeletedAtIsNull(authorId)
                 .orElseThrow(() -> new ServiceException(
                         HttpStatus.NOT_FOUND,
                         "사용자를 찾을 수 없습니다."
