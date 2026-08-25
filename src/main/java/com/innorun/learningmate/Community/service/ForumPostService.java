@@ -30,8 +30,10 @@ public class ForumPostService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ForumPostResponse createPost(ForumPostCreateRequest request) {
-        User author = getUser(request.authorId());
+    public ForumPostResponse createPost(
+            Long authorId,
+            ForumPostCreateRequest request) {
+        User author = getUser(authorId);
         ForumPost post = new ForumPost(author, request.title(), request.content(), request.boardType());
         return ForumPostResponse.from(forumPostRepository.save(post));
     }
@@ -48,9 +50,9 @@ public class ForumPostService {
     }
 
     @Transactional
-    public ForumPostResponse updatePost(Long postId, ForumPostUpdateRequest request) {
+    public ForumPostResponse updatePost(Long postId, Long authorId, ForumPostUpdateRequest request) {
         ForumPost post = getForumPost(postId);
-        validateAuthor(post.getAuthor().getId(), request.authorId());
+        validateAuthor(post.getAuthor().getId(), authorId);
         post.update(request.title(), request.content(), request.boardType());
         return ForumPostResponse.from(post);
     }
@@ -71,7 +73,7 @@ public class ForumPostService {
     }
 
     private User getUser(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
     }
 

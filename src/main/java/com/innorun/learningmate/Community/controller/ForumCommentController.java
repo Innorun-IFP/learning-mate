@@ -4,6 +4,7 @@ import com.innorun.learningmate.Community.dto.ForumCommentCreateRequest;
 import com.innorun.learningmate.Community.dto.ForumCommentResponse;
 import com.innorun.learningmate.Community.dto.ForumCommentUpdateRequest;
 import com.innorun.learningmate.Community.service.ForumCommentService;
+import com.innorun.learningmate.global.security.principal.CurrentUserId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,10 +31,11 @@ public class ForumCommentController {
     @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<ForumCommentResponse> createComment(
             @PathVariable Long postId,
+            @CurrentUserId Long authorId,
             @Valid @RequestBody ForumCommentCreateRequest request
     ) {
-        ForumCommentResponse response = forumCommentService.createComment(postId, request);
-        URI location = URI.create("/api/forum/comments/" + response.id());
+        ForumCommentResponse response = forumCommentService.createComment(postId, authorId, request);
+        URI location = URI.create("/forum/comments/" + response.id());
         return ResponseEntity.created(location).body(response);
     }
 
@@ -50,9 +52,10 @@ public class ForumCommentController {
     @PutMapping("/comments/{commentId}")
     public ForumCommentResponse updateComment(
             @PathVariable Long commentId,
+            @CurrentUserId Long authorId,
             @Valid @RequestBody ForumCommentUpdateRequest request
     ) {
-        return forumCommentService.updateComment(commentId, request);
+        return forumCommentService.updateComment(commentId, authorId, request);
     }
 
     @DeleteMapping("/comments/{commentId}")
