@@ -6,6 +6,7 @@ import com.innorun.learningmate.Community.dto.ForumPostSummaryResponse;
 import com.innorun.learningmate.Community.dto.ForumPostUpdateRequest;
 import com.innorun.learningmate.Community.entity.ForumBoardType;
 import com.innorun.learningmate.Community.service.ForumPostService;
+import com.innorun.learningmate.global.security.principal.CurrentUserId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,9 +35,12 @@ public class ForumPostController {
     private final ForumPostService forumPostService;
 
     @PostMapping
-    public ResponseEntity<ForumPostResponse> createPost(@Valid @RequestBody ForumPostCreateRequest request) {
-        ForumPostResponse response = forumPostService.createPost(request);
-        return ResponseEntity.created(URI.create("/api/forum/posts/" + response.id())).body(response);
+    public ResponseEntity<ForumPostResponse> createPost(
+            @CurrentUserId Long authorId,
+            @Valid @RequestBody ForumPostCreateRequest request) {
+
+        ForumPostResponse response = forumPostService.createPost(authorId, request);
+        return ResponseEntity.created(URI.create("/forum/posts/" + response.id())).body(response);
     }
 
     @GetMapping("/{postId}")
@@ -55,15 +59,16 @@ public class ForumPostController {
     @PutMapping("/{postId}")
     public ForumPostResponse updatePost(
             @PathVariable Long postId,
+            @CurrentUserId Long authorId,
             @Valid @RequestBody ForumPostUpdateRequest request
     ) {
-        return forumPostService.updatePost(postId, request);
+        return forumPostService.updatePost(postId, authorId, request);
     }
 
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> deletePost(
             @PathVariable Long postId,
-            @RequestParam Long authorId
+            @CurrentUserId Long authorId
     ) {
         forumPostService.deletePost(postId, authorId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

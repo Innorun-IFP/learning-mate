@@ -28,9 +28,9 @@ public class ForumCommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public ForumCommentResponse createComment(Long postId, ForumCommentCreateRequest request) {
+    public ForumCommentResponse createComment(Long postId, Long authorId, ForumCommentCreateRequest request) {
         ForumPost post = getForumPost(postId);
-        User author = getUser(request.authorId());
+        User author = getUser(authorId);
         ForumComment parent = getAndValidateParent(postId, request.parentCommentId());
 
         ForumComment comment = new ForumComment(post, author, parent, request.content());
@@ -51,9 +51,9 @@ public class ForumCommentService {
     }
 
     @Transactional
-    public ForumCommentResponse updateComment(Long commentId, ForumCommentUpdateRequest request) {
+    public ForumCommentResponse updateComment(Long commentId, Long authorId, ForumCommentUpdateRequest request) {
         ForumComment comment = findComment(commentId);
-        validateAuthor(comment.getAuthor().getId(), request.authorId());
+        validateAuthor(comment.getAuthor().getId(), authorId);
         comment.update(request.content());
         return ForumCommentResponse.from(comment);
     }
@@ -94,7 +94,7 @@ public class ForumCommentService {
     }
 
     private User getUser(Long userId) {
-        return userRepository.findById(userId)
+        return userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
     }
 

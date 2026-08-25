@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ForumPostCreateRequest(
-        @NotNull(message = "작성자 ID는 필수입니다.")
-        Long authorId,
 
         @NotBlank(message = "제목은 필수입니다.")
         @Size(max = 150, message = "제목은 150자 이하여야 합니다.")
