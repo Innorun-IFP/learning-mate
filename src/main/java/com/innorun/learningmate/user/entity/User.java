@@ -1,5 +1,6 @@
 package com.innorun.learningmate.user.entity;
 
+import com.innorun.learningmate.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,10 @@ public class User {
 
     @Column(nullable = false, unique = true, length = 20)
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     public User(String email, String password, String nickname) {
         this.email = email;
