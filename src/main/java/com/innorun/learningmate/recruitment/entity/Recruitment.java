@@ -92,4 +92,24 @@ public class Recruitment extends BaseEntity {
     public void cancel() {
         this.status = RecruitmentStatus.CANCELLED;
     }
+
+    public void updateDetails(
+            String title,
+            String description,
+            StudyType studyType,
+            String onlinePlatform,
+            String offlineLocation,
+            Integer capacity,
+            LocalDateTime recruitmentDeadline,
+            LocalDateTime startAt
+    ) {
+        this.title = title;
+        this.description = description;
+        this.studyType = studyType;
+        this.onlinePlatform = onlinePlatform;
+        this.offlineLocation = offlineLocation;
+        this.capacity = capacity;
+        this.recruitmentDeadline = recruitmentDeadline;
+        this.startAt = startAt;
+    }
 }
