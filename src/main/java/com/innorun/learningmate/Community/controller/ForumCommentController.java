@@ -21,7 +21,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/forum")
+@RequestMapping("/forum")
 @RequiredArgsConstructor
 public class ForumCommentController {
 

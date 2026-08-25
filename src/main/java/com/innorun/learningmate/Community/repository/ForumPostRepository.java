@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.util.Optional;
 
-public interface ForumRepository extends JpaRepository<ForumPost, Long> {
+public interface ForumPostRepository extends JpaRepository<ForumPost, Long> {
 
     @Override
     @EntityGraph(attributePaths = "author")

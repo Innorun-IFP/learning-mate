@@ -7,7 +7,7 @@ import com.innorun.learningmate.Community.dto.ForumPostUpdateRequest;
 import com.innorun.learningmate.Community.entity.ForumBoardType;
 import com.innorun.learningmate.Community.entity.ForumPost;
 import com.innorun.learningmate.Community.repository.ForumCommentRepository;
-import com.innorun.learningmate.Community.repository.ForumRepository;
+import com.innorun.learningmate.Community.repository.ForumPostRepository;
 import com.innorun.learningmate.user.entity.User;
 import com.innorun.learningmate.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.util.Objects;
 @Transactional(readOnly = true)
 public class ForumPostService {
 
-    private final ForumRepository forumRepository;
+    private final ForumPostRepository forumPostRepository;
     private final ForumCommentRepository commentRepository;
     private final UserRepository userRepository;
 
@@ -33,7 +33,7 @@ public class ForumPostService {
     public ForumPostResponse createPost(ForumPostCreateRequest request) {
         User author = getUser(request.authorId());
         ForumPost post = new ForumPost(author, request.title(), request.content(), request.boardType());
-        return ForumPostResponse.from(forumRepository.save(post));
+        return ForumPostResponse.from(forumPostRepository.save(post));
     }
 
     public ForumPostResponse getPost(Long postId) {
@@ -42,8 +42,8 @@ public class ForumPostService {
 
     public Page<ForumPostSummaryResponse> getPosts(ForumBoardType boardType, Pageable pageable) {
         Page<ForumPost> posts = boardType == null
-                ? forumRepository.findAll(pageable)
-                : forumRepository.findAllByBoardType(boardType, pageable);
+                ? forumPostRepository.findAll(pageable)
+                : forumPostRepository.findAllByBoardType(boardType, pageable);
         return posts.map(ForumPostSummaryResponse::from);
     }
 
@@ -62,11 +62,11 @@ public class ForumPostService {
 
         commentRepository.deleteRepliesByPostId(postId);
         commentRepository.deleteRootCommentsByPostId(postId);
-        forumRepository.delete(post);
+        forumPostRepository.delete(post);
     }
 
     private ForumPost getForumPost(Long postId) {
-        return forumRepository.findById(postId)
+        return forumPostRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
     }
 

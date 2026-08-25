@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/forum/posts")
+@RequestMapping("/forum/posts")
 @RequiredArgsConstructor
 public class ForumPostController {
 

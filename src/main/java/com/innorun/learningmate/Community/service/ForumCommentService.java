@@ -6,7 +6,7 @@ import com.innorun.learningmate.Community.dto.ForumCommentUpdateRequest;
 import com.innorun.learningmate.Community.entity.ForumComment;
 import com.innorun.learningmate.Community.entity.ForumPost;
 import com.innorun.learningmate.Community.repository.ForumCommentRepository;
-import com.innorun.learningmate.Community.repository.ForumRepository;
+import com.innorun.learningmate.Community.repository.ForumPostRepository;
 import com.innorun.learningmate.user.entity.User;
 import com.innorun.learningmate.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.Objects;
 @Transactional(readOnly = true)
 public class ForumCommentService {
 
-    private final ForumRepository forumRepository;
+    private final ForumPostRepository forumPostRepository;
     private final ForumCommentRepository commentRepository;
     private final UserRepository userRepository;
 
@@ -38,7 +38,7 @@ public class ForumCommentService {
     }
 
     public List<ForumCommentResponse> getComments(Long postId) {
-        if (!forumRepository.existsById(postId)) {
+        if (!forumPostRepository.existsById(postId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다.");
         }
         return commentRepository.findAllByPostIdOrderByCreatedAtAsc(postId).stream()
@@ -84,7 +84,7 @@ public class ForumCommentService {
     }
 
     private ForumPost getForumPost(Long postId) {
-        return forumRepository.findById(postId)
+        return forumPostRepository.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다."));
     }
 
