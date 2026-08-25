@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class RecruitmentCreateRequest {
 
-    private Long authorId;
     private String title;
     private String description;
     private StudyType studyType;
@@ -21,7 +20,6 @@ public class RecruitmentCreateRequest {
     private LocalDateTime startAt;
 
     public RecruitmentCreateRequest(
-            Long authorId,
             String title,
             String description,
             StudyType studyType,
@@ -31,7 +29,6 @@ public class RecruitmentCreateRequest {
             LocalDateTime recruitmentDeadline,
             LocalDateTime startAt
     ) {
-        this.authorId = authorId;
         this.title = title;
         this.description = description;
         this.studyType = studyType;
