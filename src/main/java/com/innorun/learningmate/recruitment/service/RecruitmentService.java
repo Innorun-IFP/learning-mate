@@ -8,6 +8,7 @@ import com.innorun.learningmate.recruitment.dto.response.RecruitmentSummaryRespo
 import com.innorun.learningmate.recruitment.entity.Recruitment;
 import com.innorun.learningmate.recruitment.entity.RecruitmentStatus;
 import com.innorun.learningmate.recruitment.repository.RecruitmentRepository;
+import com.innorun.learningmate.recruitment.validator.RecruitmentValidator;
 import com.innorun.learningmate.user.entity.User;
 import com.innorun.learningmate.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,12 @@ public class RecruitmentService {
 
     private final RecruitmentRepository recruitmentRepository;
     private final UserRepository userRepository;
+    private final RecruitmentValidator recruitmentValidator;
 
     @Transactional
     public Long create(RecruitmentCreateRequest request) {
+        recruitmentValidator.validateCreate(request);
+
         User author = userRepository.findById(request.getAuthorId())
                 .orElseThrow(() -> new ServiceException(
                         HttpStatus.NOT_FOUND,
@@ -77,6 +81,7 @@ public class RecruitmentService {
         Recruitment recruitment = findRecruitmentById(recruitmentId);
 
         validateAuthor(recruitment, authorId);
+        recruitmentValidator.validateUpdate(recruitment, request);
 
         recruitment.updateDetails(
                 request.getTitle(),
