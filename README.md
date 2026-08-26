@@ -1,4 +1,5 @@
 # Learning Mate
+<img width="1915" height="821" alt="image" src="https://github.com/user-attachments/assets/28f00d1a-972b-44c8-b220-6d1c0c0f9c2f" />
 
 > 함께 공부할 사람을 모집하고, 스터디 그룹을 운영하며, 커뮤니티에서 정보를 나눌 수 있는 학습 커뮤니티 백엔드 서비스입니다.
 
